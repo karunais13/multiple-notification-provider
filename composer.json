@@ -8,8 +8,20 @@
             "email": "karunais1392@gmail.com"
         }
     ],
+    "license" : "MIT",
+    "require": {
+        "php" : ">=5.4.0",
+        "illuminate/support" : ">= 5.0.0 <= 5.8.8",
+        "illuminate/routing": ">= 5.0.0 <= 5.8.8",
+        "illuminate/console": ">= 5.0.0 <= 5.8.8",
+        "illuminate/config": ">= 5.0.0 <= 5.8.8",
+        "illuminate/filesystem": ">= 5.0.0 <= 5.8.8"
+    },
+    "require-dev" : {
+        "phpunit/phpunit" : ">=4.0",
+        "mockery/mockery" : "dev-master"
+    },
     "minimum-stability": "dev",
-    "require": {},
     "autoload": {
         "psr-4": {
             "Karu\\NpNotification\\": "src/"
