@@ -48,7 +48,7 @@ class NotificationHelper
         }
     }
 
-    public function setConfig($param)
+    public function setConfig(Array $param)
     {
         if( is_array($param) ){
             foreach( $param as $key => $value ){
@@ -66,6 +66,8 @@ class NotificationHelper
                 }
             }
         }
+
+        return $this;
     }
 
     public function sendNotificationToUser( $user, $templateCode, $extraParam=[] )
