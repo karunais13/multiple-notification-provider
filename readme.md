@@ -4,6 +4,10 @@
 
 This package allows us send push and email notification to all device (iOS, Android, Web) using 3rd party such as [OneSignal](https://onesignal.com/) and [Firebase](https://firebase.google.com).
 
+### OneSignal(Optional)
+###### Add in this package if one of your 3rd party provider is [OneSignal](https://onesignal.com/)
+https://github.com/berkayk/laravel-onesignal (Recommended)
+
 ## Installation
 
 Install the usual [composer](https://getcomposer.org/) way.
