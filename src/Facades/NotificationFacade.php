@@ -8,6 +8,6 @@ class NotificationFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return __DIR__.'/../NotificationHelper';
+        return 'Karu\NpNotification\NotificationHelper';
     }
 }
