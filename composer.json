@@ -33,7 +33,7 @@
                 "Karu\\NpNotification\\NpNotificationProvider"
             ],
             "aliases": {
-                "NotificationHelper": "Karu\\NpNotification\\Facade"
+                "NotificationHelper": "Karu\\NpNotification\\Facades"
             }
         }
     }

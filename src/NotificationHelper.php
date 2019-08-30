@@ -26,6 +26,7 @@ class NotificationHelper
 
     protected $email = true;
     protected $notificationWeb = true; // web & native notification
+    protected $notificationMobile = true; // web & native notification
     protected $sms = false; // sms
     protected $response = [
         'notification_web'  => false,
@@ -57,6 +58,7 @@ class NotificationHelper
                         break;
                     case 'notification' :
                         $this->notificationWeb = $value;
+                        $this->notificationMobile = $value;
                         break;
                     case 'sms' :
                         $this->sms = $value;
@@ -97,6 +99,11 @@ class NotificationHelper
     private function isNotificationWeb(): bool
     {
         return $this->notificationWeb;
+    }
+
+    private function isNotificationMobile(): bool
+    {
+        return $this->notificationMobile;
     }
 
     private  function isEmail(): bool
@@ -229,6 +236,27 @@ class NotificationHelper
             }
         }
     }
+
+    private function sendNotificationMobile($user, $views, $data)
+    {
+        if( $this->isNotificationMobile() ){
+            $data['template'] = $views;
+
+            $msg = $this->getMessageObject('webnoti', $data);
+
+            $this->response['notification_mobile'] = $this->notiweb->sendNotificationToUser($user, $this->getMessageObject('webnoti', $data));
+
+            if( $this->rcver instanceof DepotSalesrep  ){
+                $content = [
+                    'content' => $msg['msg'],
+                    'subject' => $msg['msg'],
+                    'target'  => $msg['url'] ?? null
+                ];
+                $this->addToDatabase($this->rcver, Notification::NOTIFICATION_TYPE_WEB_PUSH, $content);
+            }
+        }
+    }
+
 
     private function addToDatabase($user, $type, $content)
     {
