@@ -66,6 +66,10 @@ class Notification extends BaseModel
         return $query->where('type', self::NOTIFICATION_TYPE_EMAIL);
     }
 
+    public function notiuser()
+    {
+        return $this->morphTo();
+    }
 
     public function updateRead($id)
     {

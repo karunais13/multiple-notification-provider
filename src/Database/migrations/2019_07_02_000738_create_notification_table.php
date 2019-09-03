@@ -16,8 +16,8 @@ class CreateNotificationTable extends Migration
         if( !Schema::hasTable(config('notification.tables.notification_store')) ){
             Schema::create(config('notification.tables.notification_store'), function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->string('emp_code',10);
-                $table->foreign('emp_code')->references('emp_code')->on('depot_salesrep');
+                $table->integer('notiuser_id');
+                $table->string('notiuser_type');
                 $table->tinyInteger('type')->comment('1-email, 2-web_push, 3-native_push, 4-sms');
                 $table->string('subject');
                 $table->text('content');
