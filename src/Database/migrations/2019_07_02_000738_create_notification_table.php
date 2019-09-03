@@ -13,8 +13,8 @@ class CreateNotificationTable extends Migration
      */
     public function up()
     {
-        if( !Schema::hasTable('notification') ){
-            Schema::create('notification', function (Blueprint $table) {
+        if( !Schema::hasTable(config('notification.tables.notification_store')) ){
+            Schema::create(config('notification.tables.notification_store'), function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('emp_code',10);
                 $table->foreign('emp_code')->references('emp_code')->on('depot_salesrep');
@@ -37,6 +37,6 @@ class CreateNotificationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notification');
+        Schema::dropIfExists(config('notification.tables.notification_store'));
     }
 }

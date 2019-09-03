@@ -2,28 +2,17 @@
 
 namespace Karu\NpNotification;
 
-use App\Models\ClientContact;
-use App\Models\DepotSalesrep;
-use App\Models\Notification;
-use App\Models\NotificationToken;
-use App\Models\TbUserInstallation;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Exception;
+use Karu\NpNotification\Models\Notification;
 
+use Carbon\Carbon;
 use DB;
-use Mail;
-use Auth;
 use View;
 
 class NotificationHelper
 {
-
     private $notiweb;
     private $notiemail;
-
     private $rcver;
-
     protected $email = true;
     protected $notificationWeb = true; // web & native notification
     protected $notificationMobile = true; // web & native notification
@@ -81,12 +70,15 @@ class NotificationHelper
 
         foreach( $user as $rcver ){
 
-            DB::beginTransaction();
-
             $this->rcver = $rcver;
 
             $userInfo = $this->getUserInformation($rcver);
+            if( !$userInfo )
+                continue;
+
             $data = array_merge($userInfo, $extraParam);
+
+            DB::beginTransaction();
 
             $this->sendEmail($userInfo,  $content['email'], $data);
 
@@ -120,38 +112,11 @@ class NotificationHelper
 
     private function getUserInformation($rcver)
     {
-        if( $rcver instanceof DepotSalesrep )
-            return $this->getDepotSalesrepInfo($rcver);
+        if( is_object($rcver) && method_exists($rcver, config('notification.user_info_method')) ){
+            return $rcver->{config('notification.user_info_method')};
+        }
 
-        if( $rcver instanceof ClientContact )
-            return $this->getClientPicInfo($rcver);
-
-    }
-
-    private function getDepotSalesrepInfo($salesrep)
-    {
-        return [
-            'name'      => $salesrep->name,
-            'email'     => $salesrep->email,
-            'mobile'    => $salesrep->hand_phone,
-            'role'      => $salesrep->role,
-            'user_id'   => $salesrep->emp_code,
-            'salutation' => '',
-            'token'     => $salesrep->tokens
-        ];
-    }
-
-    private function getClientPicInfo($clientPic)
-    {
-        return [
-            'name'      => $clientPic->name,
-            'email'     => $clientPic->email,
-            'mobile'    => $clientPic->phone,
-            'role'      => '',
-            'user_id'   => $clientPic->id,
-            'salutation' => '',
-            'token'     => $clientPic->tokens
-        ];
+        return null;
     }
 
     private function getMessageObject($type, $data)
@@ -205,17 +170,14 @@ class NotificationHelper
 
             $this->response['email'] = $this->notiemail->sendNotificationToUser($user, $msg);
 
-            if( $this->rcver instanceof DepotSalesrep  ){
-                $html  = View::make($msg['content']['view'], $msg['content']['data'])->render();
-                $sub  = View::make($msg['subject']['view'], $msg['subject']['data'])->render();
-
-                $content = [
-                    'content' => $html,
-                    'subject' => $sub,
-                    'target'  => $data['url'] ?? null
-                ];
-                $this->addToDatabase($this->rcver, Notification::NOTIFICATION_TYPE_EMAIL, $content);
-            }
+            $html  = View::make($msg['content']['view'], $msg['content']['data'])->render();
+            $sub  = View::make($msg['subject']['view'], $msg['subject']['data'])->render();
+            $content = [
+                'content' => $html,
+                'subject' => $sub,
+                'target'  => $data['url'] ?? null
+            ];
+            $this->addToDatabase($this->rcver, Notification::NOTIFICATION_TYPE_EMAIL, $content);
         }
     }
 
@@ -228,14 +190,12 @@ class NotificationHelper
 
             $this->response['notification_web'] = $this->notiweb->sendNotificationToUser($user, $this->getMessageObject('webnoti', $data));
 
-            if( $this->rcver instanceof DepotSalesrep  ){
-                $content = [
-                    'content' => $msg['msg'],
-                    'subject' => $msg['msg'],
-                    'target'  => $msg['url'] ?? null
-                ];
-                $this->addToDatabase($this->rcver, Notification::NOTIFICATION_TYPE_WEB_PUSH, $content);
-            }
+            $content = [
+                'content' => $msg['msg'],
+                'subject' => $msg['msg'],
+                'target'  => $msg['url'] ?? null
+            ];
+            $this->addToDatabase($this->rcver, Notification::NOTIFICATION_TYPE_WEB_PUSH, $content);
         }
     }
 
@@ -248,32 +208,30 @@ class NotificationHelper
 
             $this->response['notification_mobile'] = $this->notiweb->sendNotificationToUser($user, $this->getMessageObject('webnoti', $data));
 
-            if( $this->rcver instanceof DepotSalesrep  ){
-                $content = [
-                    'content' => $msg['msg'],
-                    'subject' => $msg['msg'],
-                    'target'  => $msg['url'] ?? null
-                ];
-                $this->addToDatabase($this->rcver, Notification::NOTIFICATION_TYPE_WEB_PUSH, $content);
-            }
+            $content = [
+                'content' => $msg['msg'],
+                'subject' => $msg['msg'],
+                'target'  => $msg['url'] ?? null
+            ];
+            $this->addToDatabase($this->rcver, Notification::NOTIFICATION_TYPE_NATIVE_PUSH, $content);
         }
     }
 
 
     private function addToDatabase($user, $type, $content)
     {
-        //TODO:: Need to add in polymorphic colums to support client contact
+        if( config('notification.log_notification') ){
+            $data = [
+                'emp_code'  => $user->emp_code,
+                'type'      => $type,
+                'content'   => $content['content'],
+                'target'    => $content['target'],
+                'subject'   => $content['subject'],
+                'is_read'   => false,
+                'created_at'   => Carbon::now(),
+            ];
 
-        $data = [
-            'emp_code'  => $user->emp_code,
-            'type'      => $type,
-            'content'   => $content['content'],
-            'target'    => $content['target'],
-            'subject'   => $content['subject'],
-            'is_read'   => false,
-            'created_at'   => Carbon::now(),
-        ];
-
-        return Notification::insert($data);
+            return Notification::insert($data);
+        }
     }
 }

@@ -36,7 +36,7 @@ class OneSignalHelper
         if( $instalation->isNotEmpty() ){
             $params['to']   = $userInfo['user_id'];
             foreach( $instalation as $item ){
-                if( $item->isEligibleWebNotification() ){
+                if( $item->isEligibleNotification() ){
                     $params['user_id'] = $item->token;
                     $newParams = $this->processParams($params);
                     OneSignal::sendNotificationToUser($newParams[0], $newParams[1], $newParams[2], $newParams[3], $newParams[4], $newParams[5]);

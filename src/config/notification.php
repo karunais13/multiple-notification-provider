@@ -6,8 +6,9 @@ return [
      * Supported for now : web -> onesignal  email -> default (Will add in more service in feature)
      */
     'service' => [
-        'web'   => 'onesignal',
-        'email' => 'default'
+        'web'    => 'onesignal',
+        'email'  => 'default',
+        'mobile' => 'onesignal'
     ],
 
     /*
@@ -36,4 +37,24 @@ return [
             ]
         ]
     ],
+
+    /*
+     * Method used to get user information.
+     * This method must be added to respective modal class
+     */
+    'user_info_method' => 'getNotificationUserInfo',
+
+    /*
+     * Table names
+     */
+    'tables' => [
+        'notification_store' => 'notification',
+        'notification_token' => 'notification_token',
+    ],
+
+
+    /*
+     * Store/Log Notification on database
+     */
+    'log_notification' => true
 ];

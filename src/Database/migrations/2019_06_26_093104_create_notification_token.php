@@ -6,7 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateNotificationToken extends Migration
 {
-    public $_table = 'notification_token';
     public $_foreign = [];
 
     /**
@@ -16,8 +15,8 @@ class CreateNotificationToken extends Migration
      */
     public function up()
     {
-        if( !Schema::hasTable($this->_table) ){
-            Schema::create($this->_table, function( Blueprint $table ){
+        if( !Schema::hasTable(config('notification.tables.notification_token')) ){
+            Schema::create(config('notification.tables.notification_token'), function( Blueprint $table ){
                 $table->increments('id');
                 $table->integer('notitokenable_id');
                 $table->string('notitokenable_type');
@@ -46,15 +45,15 @@ class CreateNotificationToken extends Migration
      */
     public function down()
     {
-        if( Schema::hasTable($this->_table) ){
+        if( Schema::hasTable(config('notification.tables.notification_token')) ){
             if( count($this->_foreign) > 0 ){
-                Schema::table($this->_table, function( Blueprint $table ){
+                Schema::table(config('notification.tables.notification_token'), function( Blueprint $table ){
                     foreach( $this->_foreign as $key => $value ){
-                        $table->dropForeign($this->_table . '_' . $key . '_foreign');
+                        $table->dropForeign(config('notification.tables.notification_token') . '_' . $key . '_foreign');
                     }
                 });
             }
-            Schema::dropIfExists($this->_table);
+            Schema::dropIfExists(config('notification.tables.notification_token'));
 
         }
     }
