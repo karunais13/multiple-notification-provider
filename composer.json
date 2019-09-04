@@ -31,9 +31,11 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Karu\\NpNotification\\NpNotificationProvider"
+                "Karu\\NpNotification\\NpNotificationProvider",
+                "Berkayk\\OneSignal\\OneSignalServiceProvider"
             ],
             "aliases": {
+                "OneSignal" : "Berkayk\\OneSignal\\OneSignalFacade",
                 "NotificationHelper": "Karu\\NpNotification\\Facades\\NotificationFacade"
             }
         }
