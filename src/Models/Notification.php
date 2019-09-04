@@ -76,9 +76,9 @@ class Notification extends BaseModel
         try{
             $update  = $this->where('id', $id)->active()->update(['is_read' => true, 'updated_at' => Carbon::now()]);
             if( !$update )
-                return response($this->resCustom(FALSE), 200);
+                return $this->resCustom(FALSE);
 
-            return response($this->resCustom(true, '', $update), 200);
+            return $this->resCustom(true, '', $update);
         } catch( \Exception $e){
             return $this->processException($e);
         }

@@ -63,4 +63,41 @@ class NotificationToken extends BaseModel
 
         return false;
     }
+
+    public function createUpdate($request, $userId=null, $userClass=null)
+    {
+        if( !$userId || !$userClass )
+            return $this->resCustom(false, "User ID & User Class is needed");
+
+        $rules = [
+            'type' => sprintf('required|in:%s,%s', self::NOTIFICATION_TOKEN_TYPE_WEB_PUSH, self::NOTIFICATION_TOKEN_TYPE_WEB_PUSH),
+        ];
+        $validator    = Validator::make($request->all(), $rules);
+        if( $validator->fails() ){
+            return $this->resCustom(false, 'Validation Failed');
+        }
+
+        $status = self::NOTIFICATION_TOKEN_ACTIVE;
+        if( !$request->action || $request->action === 'false' )
+            $status = self::NOTIFICATION_TOKEN_INACTIVE;
+
+        $anchor = [
+            'token'   => $request->token,
+            'type'    => $request->type
+        ];
+
+        $value  = [
+            'notitokenable_id'   => $userId,
+            'notitokenable_type'   => $userClass,
+            'is_login'  => true,
+            'status'    => $status
+        ];
+
+        $instalation        = $this->updateOrCreate($anchor, $value);
+        if( $instalation ){
+            return $this->resCustom(TRUE);
+        }
+
+        return $this->resCustom(FALSE);
+    }
 }

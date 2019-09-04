@@ -2,12 +2,7 @@
 # Nippon Paint Notification 
 [Laravel](http://laravel.com/) has some pretty sweet functions for sending notification. Due to business nature, certain helper by laravel need to modify. Thus, this package is created to handle the business nature.
 
-This package allows us send push and email notification to all device (iOS, Android, Web) using 3rd party such as [OneSignal](https://onesignal.com/) and [Firebase](https://firebase.google.com).
-
-### OneSignal(Optional)
-###### Add in this package if one of your 3rd party provider is [OneSignal](https://onesignal.com/)
-https://github.com/berkayk/laravel-onesignal (Recommended)
-
+This package allows us send push and email notification to all device (iOS, Android, Web) using 3rd party such as [OneSignal](https://github.com/berkayk/laravel-onesignal) and [Firebase](https://firebase.google.com).
 ## Installation
 
 Install the usual [composer](https://getcomposer.org/) way.
@@ -38,7 +33,7 @@ Install the usual [composer](https://getcomposer.org/) way.
 
 ### Configure
 
-Copy the packages config files.
+Copy the packages config and routes files to respective folder.
 
 ```
  php artisan vendor:publish --provider='Karu\NpNotification\NpNotificationProvider'
@@ -56,10 +51,11 @@ return [
      * Supported for now : web -> onesignal  email -> default (Will add in more service in feature)
      */
     'service' => [
-        'web'   => 'onesignal',
-        'email' => 'default'
+        'web'    => 'onesignal',
+        'email'  => 'default',
+        'mobile' => 'onesignal'
     ],
-    
+
     /*
      * Array contain template for all the notification.
      */
@@ -86,10 +82,59 @@ return [
             ]
         ]
     ],
+
+    /*
+     * Method used to get user information.
+     * This method must be added to respective modal class
+     */
+    'user_info_method' => 'getNotificationUserInfo',
+
+    /*
+     * Table names
+     */
+    'tables' => [
+        'notification_store' => 'notification',
+        'notification_token' => 'notification_token',
+    ],
+
+    /*
+     * User Type
+     */
+    'user_type' => [
+        'd' => \App\Models\Sample::class, // Sample
+        'c' => \App\Models\Sample2::class, // Sample
+    ],
+
+
+    /*
+     * Store/Log Notification on database
+     */
+    'log_notification' => true
 ];
-
-
     
+```
+
+###### app/routes/notification.php
+```php
+<?php
+/*
+|--------------------------------------------------------------------------
+| Notification
+|--------------------------------------------------------------------------
+|
+*/
+Route::group(['prefix'=> 'notification'], function(){
+    /*
+    |
+    | User Class -> set in the notification config with type as key
+    |
+    */
+    Route::put('token/{user_class}/{user_id}', 'NotificationTokenController@update')
+        ->name('noti.update-installation');
+    Route::put('/{notification_id}', 'NotificationController@update')
+        ->name('noti.update');
+});
+
 ```
 
 ## Usage

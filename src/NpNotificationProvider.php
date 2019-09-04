@@ -26,9 +26,13 @@ class NpNotificationProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/Database/migrations');
 
         $this->publishes([
-            __DIR__.'/config/notification.php.php' => config_path('notification.php'),
+            __DIR__.'/config/notification.php' => config_path('notification.php'),
         ]);
 
-//        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+        $this->publishes([
+            __DIR__.'/routes/notification.php' => base_path('routes/notification.php'),
+        ]);
+
+        $this->loadRoutesFrom(base_path('routes/notification.php'));
     }
 }

@@ -52,6 +52,14 @@ return [
         'notification_token' => 'notification_token',
     ],
 
+    /*
+     * User Type
+     */
+    'user_type' => [
+        'd' => \App\Models\Sample::class, // Sample
+        'c' => \App\Models\Sample2::class, // Sample
+    ],
+
 
     /*
      * Store/Log Notification on database
