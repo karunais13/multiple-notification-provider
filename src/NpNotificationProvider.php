@@ -3,6 +3,7 @@
 namespace Karu\NpNotification;
 
 use Illuminate\Support\ServiceProvider;
+use Route;
 
 class NpNotificationProvider extends ServiceProvider
 {
@@ -29,10 +30,11 @@ class NpNotificationProvider extends ServiceProvider
             __DIR__.'/config/notification.php' => config_path('notification.php'),
         ]);
 
-        $this->publishes([
-            __DIR__.'/routes/notification.php' => base_path('routes/notification.php'),
-        ]);
+        Route::middleware('web')
+            ->group(__DIR__.'/routes/notification.php');
 
-        $this->loadRoutesFrom(base_path('routes/notification.php'));
+        Route::prefix('api')
+            ->middleware('api')
+            ->group(__DIR__.'/routes/notification.php');
     }
 }
