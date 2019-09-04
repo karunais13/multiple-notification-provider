@@ -13,6 +13,6 @@ Route::group(['prefix'=> 'notification'], function(){
     */
     Route::put('token/{user_class}/{user_id}', 'Karu\NpNotification\Controller\NotificationTokenController@update')
         ->name('noti.update-installation');
-    Route::put('{notification_id}', 'Karu\NpNotification\Controller\NotificationController@update')
+    Route::put('{notification_id}/read', 'Karu\NpNotification\Controller\NotificationController@update')
         ->name('noti.update');
 });

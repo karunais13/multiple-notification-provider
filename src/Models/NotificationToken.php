@@ -4,15 +4,15 @@ namespace Karu\NpNotification\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Validator;
+
 class NotificationToken extends BaseModel
 {
     use SoftDeletes;
 
     const
         NOTIFICATION_TOKEN_ACTIVE      = 1,
-        NOTIFICATION_TOKEN_INACTIVE    = 0,
-
-        NOTIFICATION_TOKEN_TYPE_WEB_PUSH    = 1
+        NOTIFICATION_TOKEN_INACTIVE    = 0
     ;
 
 
@@ -70,7 +70,7 @@ class NotificationToken extends BaseModel
             return $this->resCustom(false, "User ID & User Class is needed");
 
         $rules = [
-            'type' => sprintf('required|in:%s,%s', self::NOTIFICATION_TOKEN_TYPE_WEB_PUSH, self::NOTIFICATION_TOKEN_TYPE_WEB_PUSH),
+            'type' => sprintf('required|in:%s,%s', NOTIFICATION_TOKEN_TYPE_WEB, NOTIFICATION_TOKEN_TYPE_IOS, NOTIFICATION_TOKEN_TYPE_ANDROID),
         ];
         $validator    = Validator::make($request->all(), $rules);
         if( $validator->fails() ){
@@ -81,23 +81,52 @@ class NotificationToken extends BaseModel
         if( !$request->action || $request->action === 'false' )
             $status = self::NOTIFICATION_TOKEN_INACTIVE;
 
-        $anchor = [
-            'token'   => $request->token,
-            'type'    => $request->type
-        ];
-
         $value  = [
             'notitokenable_id'   => $userId,
             'notitokenable_type'   => $userClass,
             'is_login'  => true,
-            'status'    => $status
+            'status'    => $status,
         ];
 
-        $instalation        = $this->updateOrCreate($anchor, $value);
+
+        //TODO :: Update or Create function by laravel not working.
+        $exist = $this->where('token', $request->token)->where('type', $request->type)->exists();
+        if( $exist ){
+            $update = $this->where('token', $request->token)->where('type', $request->type)->update($value);
+            if( $update ){
+                return $this->resCustom(TRUE);
+            }
+        }else {
+            $anchor = [
+                'token'   => $request->token,
+                'type'    => $request->type
+            ];
+            $value = array_merge($value, $anchor);
+            $insert = $this->insert($value);
+            if ($insert) {
+                return $this->resCustom(true);
+
+            }
+        }
+
+        $instalation        = NotificationToken::updateOrCreate($anchor, $value);
         if( $instalation ){
             return $this->resCustom(TRUE);
         }
 
         return $this->resCustom(FALSE);
     }
+
+    public function unsubscribeUser($userId, $userClassType, $token)
+    {
+        $userClassList = config('notification.user_type');
+
+        return $this->where('notitokenable_id', $userId)
+            ->where('notitokenable_type', $userClassList[$userClassType])
+            ->isLogin()
+            ->active()
+            ->where('token', $token)
+            ->update(['is_login' => 0 ]);
+    }
+
 }

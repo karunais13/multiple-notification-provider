@@ -8,12 +8,7 @@ class Notification extends BaseModel
 {
     const
         NOTIFICATION_STATUS_ACTIVE     = 1,
-        NOTIFICATION_STATUS_INACTIVE   = 0,
-
-        NOTIFICATION_TYPE_EMAIL          = 1,
-        NOTIFICATION_TYPE_WEB_PUSH       = 2,
-        NOTIFICATION_TYPE_NATIVE_PUSH    = 3,
-        NOTIFICATION_TYPE_SMS            = 4
+        NOTIFICATION_STATUS_INACTIVE   = 0
     ;
 
     protected $fillable = [
@@ -48,22 +43,22 @@ class Notification extends BaseModel
 
     public function scopeIsWebPush( $query )
     {
-        return $query->where('type', self::NOTIFICATION_TYPE_WEB_PUSH);
+        return $query->where('type', NOTIFICATION_TYPE_WEB_PUSH);
     }
 
     public function scopeIsPush( $query )
     {
-        return $query->where('type', self::NOTIFICATION_TYPE_NATIVE_PUSH);
+        return $query->where('type', NOTIFICATION_TYPE_NATIVE_PUSH);
     }
 
     public function scopeIsSms( $query )
     {
-        return $query->where('type', self::NOTIFICATION_TYPE_SMS);
+        return $query->where('type', NOTIFICATION_TYPE_SMS);
     }
 
     public function scopeIsEmail( $query )
     {
-        return $query->where('type', self::NOTIFICATION_TYPE_EMAIL);
+        return $query->where('type', NOTIFICATION_TYPE_EMAIL);
     }
 
     public function notiuser()
@@ -82,6 +77,31 @@ class Notification extends BaseModel
         } catch( \Exception $e){
             return $this->processException($e);
         }
+    }
+
+    public function getUnReadUserNotificationList( $userId, $userType, $notiType = NOTIFICATION_TYPE_WEB_PUSH, $passDay = 1)
+    {
+        $notificationList = $this->where('notiuser_id', \Auth::user()->emp_code)
+            ->where('notiuser_type', $userType)
+            ->when($passDay > 0, function($q)use($passDay){
+                $q->where('created_at', '>=', Carbon::now()->subDays($passDay))
+                    ->orWhere('is_read', FALSE);
+            })
+            ->active()
+            ->orderBy('id', 'DESC');
+
+        switch ($notiType){
+            case NOTIFICATION_TYPE_WEB_PUSH :
+                $notificationList = $notificationList->isWebPush();
+            case NOTIFICATION_TYPE_NATIVE_PUSH :
+                $notificationList = $notificationList->isPush();
+            case NOTIFICATION_TYPE_EMAIL :
+                $notificationList = $notificationList->isEmail();
+            case NOTIFICATION_TYPE_EMAIL :
+                $notificationList = $notificationList->isSms();
+        }
+
+        return $notificationList->get();
     }
 
 }

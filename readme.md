@@ -139,6 +139,12 @@ Route::group(['prefix'=> 'notification'], function(){
 
 ## Usage
 
+### Type of Notification Constant 
+        NOTIFICATION_TYPE_EMAIL 
+        NOTIFICATION_TYPE_WEB_PUSH    
+        NOTIFICATION_TYPE_NATIVE_PUSH 
+        NOTIFICATION_TYPE_SMS          
+
 ### Set Config(Optional) 
 
 ```php
@@ -157,6 +163,33 @@ Route::group(['prefix'=> 'notification'], function(){
 
 ```php
  $noti = NotificationHelper::sendNotificationToUser($user, $templateCode, $extraParam);
+```
+
+### Get Notification List
+
+```php
+    /**
+     * @param $userId
+     * @param $userType (User class name)
+     * @param $notiType (NOTIFICATION_TYPE_EMAIL | NOTIFICATION_TYPE_WEB_PUSH | NOTIFICATION_TYPE_NATIVE_PUSH | NOTIFICATION_TYPE_SMS)
+     * @param  int  $pastDay (For all record send 0) 
+     *
+     * @return collection
+     */
+ $notiList = NotificationHelper::getUnReadUserNotificationList($userId, $userType, $notiType, $pastDay);
+```
+
+### Unsubscribe User from notification
+
+```php
+    /**
+     * @param $userId
+     * @param $userClassType (from notification config user type) 
+     * @param $token
+     *
+     * @return bool
+     */
+ $notiList = NotificationHelper::unsubscribeUser($userId, $userClassType, $token);
 ```
 
 ## Licence

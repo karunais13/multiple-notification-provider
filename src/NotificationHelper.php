@@ -3,6 +3,7 @@
 namespace Karu\NpNotification;
 
 use Karu\NpNotification\Models\Notification;
+use Karu\NpNotification\Models\NotificationToken;
 
 use Carbon\Carbon;
 use DB;
@@ -88,6 +89,25 @@ class NotificationHelper
         }
 
         return $this->response;
+    }
+
+    public function getUnReadUserNotificationList( $userId, $userType, $notiType = NOTIFICATION_TYPE_WEB_PUSH, $passDay = 1)
+    {
+        return (new Notification)->getUnReadUserNotificationList($userId, $userType, $notiType, $passDay);
+    }
+
+    /**
+     * @param $userId
+     * @param $userClassType
+     * @param $token
+     *
+     * @return bool
+     */
+    public function unsubscribeUser($userId, $userClassType, $token)
+    {
+        $notification = (new NotificationToken)->unsubscribeUser($userId, $userClassType, $token);
+
+        return true;
     }
 
     private function isNotificationWeb(): bool
@@ -177,7 +197,7 @@ class NotificationHelper
                 'subject' => $sub,
                 'target'  => $data['url'] ?? null
             ];
-            $this->addToDatabase($this->rcver, Notification::NOTIFICATION_TYPE_EMAIL, $content);
+            $this->addToDatabase($this->rcver, NOTIFICATION_TYPE_EMAIL, $content);
         }
     }
 
@@ -195,7 +215,7 @@ class NotificationHelper
                 'subject' => $msg['msg'],
                 'target'  => $msg['url'] ?? null
             ];
-            $this->addToDatabase($this->rcver, Notification::NOTIFICATION_TYPE_WEB_PUSH, $content);
+            $this->addToDatabase($this->rcver, NOTIFICATION_TYPE_WEB_PUSH, $content);
         }
     }
 
@@ -213,10 +233,9 @@ class NotificationHelper
                 'subject' => $msg['msg'],
                 'target'  => $msg['url'] ?? null
             ];
-            $this->addToDatabase($this->rcver, Notification::NOTIFICATION_TYPE_NATIVE_PUSH, $content);
+            $this->addToDatabase($this->rcver, NOTIFICATION_TYPE_NATIVE_PUSH, $content);
         }
     }
-
 
     private function addToDatabase($user, $type, $content)
     {

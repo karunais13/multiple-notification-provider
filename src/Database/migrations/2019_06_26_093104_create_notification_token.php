@@ -18,7 +18,7 @@ class CreateNotificationToken extends Migration
         if( !Schema::hasTable(config('notification.tables.notification_token')) ){
             Schema::create(config('notification.tables.notification_token'), function( Blueprint $table ){
                 $table->increments('id');
-                $table->integer('notitokenable_id');
+                $table->string('notitokenable_id');
                 $table->string('notitokenable_type');
                 $table->unsignedInteger('type')->default(1)->comment('1 => Web Push Notification');
                 $table->string('token');
