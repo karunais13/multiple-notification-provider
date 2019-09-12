@@ -51,7 +51,6 @@ class OneSignalHelper
 
     private function processParams( $params )
     {
-        $params     = $params;
         $arr = [
             null,
             null,

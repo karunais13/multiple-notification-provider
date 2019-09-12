@@ -85,6 +85,8 @@ class NotificationHelper
 
             $this->sendNotificationWeb($userInfo, $content['web_push'], $data);
 
+            $this->sendNotificationMobile($userInfo, $content['mobile_push'], $data);
+
             DB::commit();
         }
 
@@ -155,10 +157,12 @@ class NotificationHelper
                 ];
                 break;
             case 'webnoti' :
+            case 'mobilenoti' :
                 $content = $data['template']['content'] ? view(sprintf($data['template']['content'], strtolower($data['country_code'])), $data)->render() : '';
                 return [
                     'msg' => $content,
                     'url' => $data['url'] ?? null,
+                    'data' => $data['data'] ?? null
                 ];
                 break;
             default :
@@ -224,9 +228,9 @@ class NotificationHelper
         if( $this->isNotificationMobile() ){
             $data['template'] = $views;
 
-            $msg = $this->getMessageObject('webnoti', $data);
+            $msg = $this->getMessageObject('mobilenoti', $data);
 
-            $this->response['notification_mobile'] = $this->notiweb->sendNotificationToUser($user, $this->getMessageObject('webnoti', $data));
+            $this->response['notification_mobile'] = $this->notiweb->sendNotificationToUser($user, $this->getMessageObject('mobilenoti', $data));
 
             $content = [
                 'content' => $msg['msg'],
