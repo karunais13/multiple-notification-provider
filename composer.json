@@ -1,6 +1,6 @@
 {
-    "name": "karu/np-notification",
-    "description": "Nippon Notification",
+    "name": "karu/multiple-notification-provider",
+    "description": "Miltiple Notification",
     "type": "library",
     "authors": [
         {
