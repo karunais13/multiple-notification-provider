@@ -1,5 +1,4 @@
-<img src="https://websso.nipponpaint.com.my/img/logo/nippon-logo.png"></p>
-# Nippon Paint Notification 
+# Notification 
 [Laravel](http://laravel.com/) has some pretty sweet functions for sending notification. Due to business nature, certain helper by laravel need to modify. Thus, this package is created to handle the business nature.
 
 This package allows us send push and email notification to all device (iOS, Android, Web) using 3rd party such as [OneSignal](https://github.com/berkayk/laravel-onesignal) and [Firebase](https://firebase.google.com).
