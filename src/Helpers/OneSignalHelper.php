@@ -1,6 +1,6 @@
 <?php
 
-namespace Karu\NpNotification;
+namespace Karu\NpNotification\Helpers;
 
 use OneSignal;
 
@@ -43,10 +43,10 @@ class OneSignalHelper
                 }
             }
 
-            return true;
+            return [true, 'Success'];
         }
 
-        return false;
+        return [false, 'Failed'];
     }
 
     private function processParams( $params )

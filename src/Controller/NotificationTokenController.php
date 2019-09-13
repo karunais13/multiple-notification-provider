@@ -18,9 +18,10 @@ class NotificationTokenController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $userClassType, $userId)
+    public function update(Request $request, $userId)
     {
         try{
+            $userClassType = config('notification.user_type.login_user_type');
 
             $userClassList = config('notification.user_type');
             if( !array_key_exists($userClassType, $userClassList) )

@@ -70,7 +70,7 @@ class NotificationToken extends BaseModel
             return $this->resCustom(false, "User ID & User Class is needed");
 
         $rules = [
-            'type' => sprintf('required|in:%s,%s', NOTIFICATION_TOKEN_TYPE_WEB, NOTIFICATION_TOKEN_TYPE_IOS, NOTIFICATION_TOKEN_TYPE_ANDROID),
+            'type' => sprintf('required|in:%s,%s,%s', NOTIFICATION_TOKEN_TYPE_WEB, NOTIFICATION_TOKEN_TYPE_IOS, NOTIFICATION_TOKEN_TYPE_ANDROID),
         ];
         $validator    = Validator::make($request->all(), $rules);
         if( $validator->fails() ){

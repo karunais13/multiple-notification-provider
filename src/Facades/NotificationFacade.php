@@ -8,6 +8,6 @@ class NotificationFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'Karu\NpNotification\NotificationHelper';
+        return 'Karu\NpNotification\Helpers\NotificationHelper';
     }
 }

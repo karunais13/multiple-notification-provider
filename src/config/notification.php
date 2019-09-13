@@ -12,6 +12,18 @@ return [
     ],
 
     /*
+     * Template view structure by country folder.
+     *
+     * If is set to TRUE
+     * Ex : notification.%s.{templateCode}.email_subject (%s -> country_code)
+     *
+     * If is set to FALSE
+     * Ex : notification.{templateCode}.email_subject
+     *
+     */
+    'template_content_by_country' => true,
+
+    /*
      * Array contain template for all the notification.
      */
     'template' => [
@@ -60,6 +72,7 @@ return [
         'c' => \App\Models\Sample2::class, // Sample
     ],
 
+    'login_user_type' => 'd',
 
     /*
      * Store/Log Notification on database

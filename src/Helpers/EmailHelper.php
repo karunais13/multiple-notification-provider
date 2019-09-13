@@ -1,6 +1,6 @@
 <?php
 
-namespace Karu\NpNotification;
+namespace Karu\NpNotification\Helpers;
 
 use Mail;
 
@@ -16,11 +16,11 @@ class EmailHelper
                 $message->subject($subject);
             });
 
-            return TRUE;
+            return [TRUE, 'Success'];
 
         } catch(\Exception $e){
 
-            return FALSE;
+            return [FALSE, $e->getMessage()];
         }
     }
 
