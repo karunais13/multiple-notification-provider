@@ -84,8 +84,10 @@ class Notification extends BaseModel
         $notificationList = $this->where('notiuser_id', \Auth::user()->emp_code)
             ->where('notiuser_type', $userType)
             ->when($passDay > 0, function($q)use($passDay){
-                $q->where('created_at', '>=', Carbon::now()->subDays($passDay))
-                    ->orWhere('is_read', FALSE);
+                $q->where(function($w) use($passDay){
+                    $w->where('created_at', '>=', Carbon::now()->subDays($passDay))
+                        ->orWhere('is_read', FALSE);
+                });
             })
             ->active()
             ->orderBy('id', 'DESC');
@@ -93,12 +95,16 @@ class Notification extends BaseModel
         switch ($notiType){
             case NOTIFICATION_TYPE_WEB_PUSH :
                 $notificationList = $notificationList->isWebPush();
+                break;
             case NOTIFICATION_TYPE_NATIVE_PUSH :
                 $notificationList = $notificationList->isPush();
+                break;
             case NOTIFICATION_TYPE_EMAIL :
                 $notificationList = $notificationList->isEmail();
+                break;
             case NOTIFICATION_TYPE_EMAIL :
                 $notificationList = $notificationList->isSms();
+                break;
         }
 
         return $notificationList->get();
