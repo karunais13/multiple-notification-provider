@@ -43,9 +43,11 @@ class NotificationHelper extends Sender
                     case 'email':
                         $this->email = $value;
                         break;
-                    case 'notification' :
-                        $this->notificationWeb = $value;
+                    case 'mobile' :
                         $this->notificationMobile = $value;
+                        break;
+                    case 'web' :
+                        $this->notificationWeb = $value;
                         break;
                     case 'sms' :
                         $this->sms = $value;
