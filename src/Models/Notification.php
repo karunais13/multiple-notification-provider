@@ -102,7 +102,7 @@ class Notification extends BaseModel
             case NOTIFICATION_TYPE_EMAIL :
                 $notificationList = $notificationList->isEmail();
                 break;
-            case NOTIFICATION_TYPE_EMAIL :
+            case NOTIFICATION_TYPE_SMS :
                 $notificationList = $notificationList->isSms();
                 break;
         }
