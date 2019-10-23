@@ -37,24 +37,7 @@ class NotificationHelper extends Sender
      */
     public function setConfig(Array $param)
     {
-        if( is_array($param) ){
-            foreach( $param as $key => $value ){
-                switch($key){
-                    case 'email':
-                        $this->email = $value;
-                        break;
-                    case 'mobile' :
-                        $this->notificationMobile = $value;
-                        break;
-                    case 'web' :
-                        $this->notificationWeb = $value;
-                        break;
-                    case 'sms' :
-                        $this->sms = $value;
-                        break;
-                }
-            }
-        }
+        $this->updateConfig($param);
 
         return $this;
     }
