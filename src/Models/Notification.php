@@ -19,10 +19,6 @@ class Notification extends BaseModel
         'created_at', 'updated_at'
     ];
 
-    protected $hidden = [
-        'created_at', 'updated_at'
-    ];
-
     public function __construct()
     {
         parent::__construct();
@@ -81,7 +77,7 @@ class Notification extends BaseModel
 
     public function getUnReadUserNotificationList( $userId, $userType, $notiType = NOTIFICATION_TYPE_WEB_PUSH, $passDay = 1)
     {
-        $notificationList = $this->where('notiuser_id', \Auth::user()->emp_code)
+        $notificationList = $this->where('notiuser_id', $userId)
             ->where('notiuser_type', $userType)
             ->when($passDay > 0, function($q)use($passDay){
                 $q->where(function($w) use($passDay){

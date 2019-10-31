@@ -69,15 +69,11 @@ class NotificationHelper extends Sender
 
             $data = array_merge($userInfo, $extraParam);
 
-            DB::beginTransaction();
-
             $this->sendEmail($userInfo,  $content['email'], $data);
 
             $this->sendNotificationWeb($userInfo, $content['web_push'], $data);
 
             $this->sendNotificationMobile($userInfo, $content['mobile_push'], $data);
-
-            DB::commit();
         }
 
         return $this->response;
