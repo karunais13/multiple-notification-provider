@@ -18,7 +18,7 @@ class BaseModel extends Model
 
     public function processException($exception, $statusCode = 200)
     {
-        if( strtolower(env('APP_ENV')) != "production" )
+        if( env('APP_DEBUG') || strtolower(env('APP_ENV')) != "production" )
             return $this->resCustom(FALSE, $exception->getMessage()." Line :".$exception->getLine()." ".$exception->getFile());
         else
             return $this->resCustom(FALSE, __('Server Error'));

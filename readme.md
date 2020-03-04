@@ -1,4 +1,9 @@
 # Notification 
+[![Build Status](https://img.shields.io/github/forks/karunais13/multiple-notification-provider.svg)](https://github.com/karunais13/multiple-notification-provider)
+[![Latest Stable Version](https://img.shields.io/packagist/v/karunais13/multiple-notification-provider.svg)](https://packagist.org/packages/karunais13/multiple-notification-provider)
+[![PHP version](https://img.shields.io/packagist/php-v/karunais13/multiple-notification-provider.svg)](https://packagist.org/packages/karunais13/multiple-notification-provider)
+[![License](https://img.shields.io/github/license/karunais13/multiple-notification-provider.svg)](https://github.com/karunais13/multiple-notification-provider)
+
 [Laravel](http://laravel.com/) has some pretty sweet functions for sending notification. Due to business nature, certain helper by laravel need to modify. Thus, this package is created to handle the business nature.
 
 This package allows us send push and email notification to all device (iOS, Android, Web) using 3rd party such as [OneSignal](https://github.com/berkayk/laravel-onesignal) and [Firebase](https://firebase.google.com).
@@ -8,7 +13,7 @@ Install the usual [composer](https://getcomposer.org/) way.
 
 ###### Run this command at root directory of your project
 ```json
-"composer require karu/multiple-notification-provider"
+"composer require karunais13/multiple-notification-provider"
 ```
 
 #### For Laravel 5.5 and below add provider in config file like below : 

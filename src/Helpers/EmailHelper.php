@@ -13,6 +13,27 @@ class EmailHelper
             {
                 $subject = $content['subject']['view'] ? view($content['subject']['view'], $content['subject']['data'])->render() : '';
                 $message->to($userInfo['email']);
+
+                if( isset($userInfo['reply_to']) ){
+                    $message->replyTo($userInfo['reply_to']);
+                }
+
+                if( isset($userInfo['bcc']) ){
+                    $message->bcc($userInfo['bcc']);
+                }
+
+                if( isset($userInfo['cc']) ){
+                    $message->cc($userInfo['cc']);
+                }
+
+                if( isset($userInfo['attach']) ){
+                    $message->attach($userInfo['attach']['path'], $userInfo['attach']['others']);
+                }
+
+                if( isset($userInfo['attachData']) ){
+                    $message->attachData($userInfo['attachData']['data'], $userInfo['attachData']['name'], $userInfo['attachData']['others']);
+                }
+
                 $message->subject($subject);
             });
 
