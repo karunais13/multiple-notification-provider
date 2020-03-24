@@ -40,7 +40,7 @@ Install the usual [composer](https://getcomposer.org/) way.
 Copy the packages config and routes files to respective folder.
 
 ```
- php artisan vendor:publish --provider='Karu\NpNotification\NpNotificationProvider'
+ php artisan vendor:publish --provider=Karu\NpNotification\NpNotificationProvider
 ```
 
 ###### app/config/notification.php
