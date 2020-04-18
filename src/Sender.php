@@ -54,12 +54,15 @@ class Sender
 
             $html  = !empty($msg['content']['view']) ? $this->renderContent($msg['content']['view'], $msg['content']['data']) : "";
             $sub  = !empty($msg['content']['view']) ? $this->renderSubject($msg['subject']['view'], $msg['subject']['data']) : "";
-            $content = [
-                'content' => $html,
-                'subject' => $sub,
-                'target'  => $data['url'] ?? null
-            ];
-            $this->addToDatabase($this->rcver, $data['user_type'], NOTIFICATION_TYPE_EMAIL, $content);
+
+            if( $this->response['email'][0] ) {
+                $content = [
+                    'content' => $html,
+                    'subject' => $sub,
+                    'target'  => $data['url'] ?? null
+                ];
+                $this->addToDatabase($user, $data['user_type'], NOTIFICATION_TYPE_EMAIL, $content);
+            }
         }
     }
 
@@ -74,12 +77,14 @@ class Sender
 
             $this->response['notification_web'] = $this->notiweb->sendNotificationToUser($user, $this->getMessageObject('webnoti', $data));
 
-            $content = [
-                'content' => $msg['msg'],
-                'subject' => $msg['msg'],
-                'target'  => $msg['url'] ?? null
-            ];
-            $this->addToDatabase($this->rcver, $data['user_type'], NOTIFICATION_TYPE_WEB_PUSH, $content);
+            if( $this->response['notification_web'][0] ) {
+                $content = [
+                    'content' => $msg['msg'],
+                    'subject' => $msg['msg'],
+                    'target'  => $msg['url'] ?? null
+                ];
+                $this->addToDatabase($user, $data['user_type'], NOTIFICATION_TYPE_WEB_PUSH, $content);
+            }
         }
     }
 
@@ -94,12 +99,14 @@ class Sender
 
             $this->response['notification_mobile'] = $this->notimobile->sendNotificationToUser($user, $this->getMessageObject('mobilenoti', $data));
 
-            $content = [
-                'content' => $msg['msg'],
-                'subject' => $msg['msg'],
-                'target'  => $msg['url'] ?? null
-            ];
-            $this->addToDatabase($this->rcver, $data['user_type'], NOTIFICATION_TYPE_NATIVE_PUSH, $content);
+            if( $this->response['notification_mobile'][0] ) {
+                $content = [
+                    'content' => $msg['msg'],
+                    'subject' => $msg['msg'],
+                    'target' => $msg['url'] ?? null
+                ];
+                $this->addToDatabase($user, $data['user_type'], NOTIFICATION_TYPE_NATIVE_PUSH, $content);
+            }
         }
     }
 
@@ -107,7 +114,7 @@ class Sender
     {
         if( config('notification.log_notification') ){
             $data = [
-                'notiuser_id'  => $user->emp_code,
+                'notiuser_id'  => $user['user_id'],
                 'notiuser_type' => $userType,
                 'type'      => $type,
                 'content'   => $content['content'],

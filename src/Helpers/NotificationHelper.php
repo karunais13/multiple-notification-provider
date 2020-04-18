@@ -14,11 +14,6 @@ use DB;
 class NotificationHelper extends Sender
 {
     /**
-     * @var User Instance
-     */
-    public $rcver;
-
-    /**
      * @var array
      */
     protected $response = [
@@ -60,8 +55,6 @@ class NotificationHelper extends Sender
             $user = [$user];
 
         foreach( $user as $rcver ){
-
-            $this->rcver = $rcver;
 
             $userInfo = $this->getUserInformation($rcver);
             if( !$userInfo )
