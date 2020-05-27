@@ -75,7 +75,7 @@ class Notification extends BaseModel
         }
     }
 
-    public function getUnReadUserNotificationList( $userId, $userType, $notiType = NOTIFICATION_TYPE_WEB_PUSH, $passDay = 1)
+    public function getUnReadUserNotificationList( $userId, $userType, $notiType = NOTIFICATION_TYPE_WEB_PUSH, $passDay = 1, $limit=20, $offset=0)
     {
         $notificationList = $this->where('notiuser_id', $userId)
             ->where('notiuser_type', $userType)
@@ -103,7 +103,7 @@ class Notification extends BaseModel
                 break;
         }
 
-        return $notificationList->get();
+        return $notificationList->limit($limit)->offset($offset)->get();
     }
 
 }

@@ -80,9 +80,9 @@ class NotificationHelper extends Sender
      *
      * @return Notification instance
      */
-    public function getUnReadUserNotificationList( $userId, $userType, $notiType = NOTIFICATION_TYPE_WEB_PUSH, $passDay = 1)
+    public function getUnReadUserNotificationList( $userId, $userType, $notiType = NOTIFICATION_TYPE_WEB_PUSH, $passDay = 1, $limit=20, $offset=0)
     {
-        return (new Notification)->getUnReadUserNotificationList($userId, $userType, $notiType, $passDay);
+        return (new Notification)->getUnReadUserNotificationList($userId, $userType, $notiType, $passDay, $limit, $offset);
     }
 
     /**
