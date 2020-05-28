@@ -73,7 +73,7 @@ class Sender
 
             $msg = $this->getMessageObject('webnoti', $data);
 
-            $user['token']  = $this->removeUnwantedToken($user['token'], NOTIFICATION_TYPE_WEB_PUSH);
+            $user['token']  = $this->removeUnwantedToken($user['token'], [NOTIFICATION_TOKEN_TYPE_WEB]);
 
             $this->response['notification_web'] = $this->notiweb->sendNotificationToUser($user, $this->getMessageObject('webnoti', $data));
 
@@ -95,7 +95,7 @@ class Sender
 
             $msg = $this->getMessageObject('mobilenoti', $data);
 
-            $user['token']  = $this->removeUnwantedToken($user['token'], NOTIFICATION_TYPE_NATIVE_PUSH);
+            $user['token']  = $this->removeUnwantedToken($user['token'],  [NOTIFICATION_TOKEN_TYPE_ANDROID, NOTIFICATION_TOKEN_TYPE_IOS]);
 
             $this->response['notification_mobile'] = $this->notimobile->sendNotificationToUser($user, $this->getMessageObject('mobilenoti', $data));
 
@@ -131,14 +131,15 @@ class Sender
 
     private function removeUnwantedToken($token, $type)
     {
+        $newToken =  [];
         if( $token->isNotEmpty() ) {
             foreach ($token as $key => $item) {
-                if ($item->type != $type) {
-                    unset($token[$key]);
+                if( in_array($item->type, $type) ) {
+                    $newToken[] = $token[$key];
                 }
             }
         }
 
-        return $token;
+        return collect($newToken);
     }
 }

@@ -38,4 +38,12 @@ class NotificationController extends Controller
             return $this->processException($e);
         }
     }
+
+    protected function processException($exception, $statusCode = 200)
+    {
+        if( env('APP_DEBUG') || strtolower(env('APP_ENV')) != "production" )
+            return response(NpRes::resCustom(FALSE, $exception->getMessage()." Line :".$exception->getLine()." ".$exception->getFile()), $statusCode);
+        else
+            return response(NpRes::resCustom(FALSE, __('Server Error')), $statusCode);
+    }
 }

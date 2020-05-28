@@ -27,7 +27,7 @@ class CreateNotificationToken extends Migration
                 $table->timestamp('last_updated_at')->nullable();
                 $table->softDeletes();
                 $table->timestamp('created_at')->useCurrent();
-                $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+                $table->timestamp('updated_at')->nullable()->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 
                 if( count($this->_foreign) > 0 ){
                     foreach( $this->_foreign as $key => $value ){
