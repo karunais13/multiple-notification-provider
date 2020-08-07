@@ -11,27 +11,29 @@ class EmailHelper
         try {
             $sendMail = Mail::send($content['content']['view'], $content['content']['data'], function ($message) use($content, $userInfo)
             {
+                $data = $content['content']['data'];
+
                 $subject = $content['subject']['view'] ? view($content['subject']['view'], $content['subject']['data'])->render() : '';
                 $message->to($userInfo['email']);
 
-                if( isset($content['reply_to']) ){
+                if( isset($data['reply_to']) ){
                     $message->replyTo($content['reply_to']);
                 }
 
-                if( isset($content['bcc']) ){
+                if( isset($data['bcc']) ){
                     $message->bcc($content['bcc']);
                 }
 
-                if( isset($content['cc']) ){
+                if( isset($data['cc']) ){
                     $message->cc($content['cc']);
                 }
 
-                if( isset($content['attach']) ){
-                    $message->attach($content['attach']['path'], $content['attach']['others']);
+                if( isset($data['attach']) ){
+                    $message->attach($data['attach']['path']);
                 }
 
-                if( isset($content['attachData']) ){
-                    $message->attachData($content['attachData']['data'], $content['attachData']['name'], $content['attachData']['others']);
+                if( isset($data['attachData']) ){
+                    $message->attachData($data['attachData']['data'], $data['attachData']['name'], $data['attachData']['others']);
                 }
 
                 $message->subject($subject);
