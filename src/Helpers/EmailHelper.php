@@ -14,7 +14,16 @@ class EmailHelper
                 $data = $content['content']['data'];
 
                 $subject = $content['subject']['view'] ? view($content['subject']['view'], $content['subject']['data'])->render() : '';
-                $message->to($userInfo['email']);
+                $emails = explode(',', $userInfo['email']);
+                foreach ($emails as $key => $email) {
+                    if( empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL) ){
+                        unset($emails[$key]);
+                    }else{
+                        $emails[$key] = trim($email);
+                    }
+                }
+
+                $message->to($emails);
 
                 if( isset($data['reply_to']) ){
                     $message->replyTo($content['reply_to']);
