@@ -38,7 +38,13 @@ class EmailHelper
                 }
 
                 if( isset($data['attach']) ){
-                    $message->attach($data['attach']['path']);
+                    if( is_array($data['attach']['path']) ){
+                        foreach ($data['attach']['path'] as $attach) {
+                            $message->attach($attach);
+                        }
+                    }else{
+                        $message->attach($data['attach']['path']);
+                    }
                 }
 
                 if( isset($data['attachData']) ){

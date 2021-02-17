@@ -14,7 +14,14 @@ class NpNotificationProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        define("NOTIFICATION_TYPE_EMAIL", 1);
+        define("NOTIFICATION_TYPE_WEB_PUSH", 2);
+        define("NOTIFICATION_TYPE_NATIVE_PUSH", 3);
+        define("NOTIFICATION_TYPE_SMS", 4);
+
+        define("NOTIFICATION_TOKEN_TYPE_WEB", 1);
+        define("NOTIFICATION_TOKEN_TYPE_IOS", 2);
+        define("NOTIFICATION_TOKEN_TYPE_ANDROID", 3);
     }
 
     /**
@@ -24,16 +31,6 @@ class NpNotificationProvider extends ServiceProvider
      */
     public function boot()
     {
-        define("NOTIFICATION_TYPE_EMAIL", 1);
-        define("NOTIFICATION_TYPE_WEB_PUSH", 2);
-        define("NOTIFICATION_TYPE_NATIVE_PUSH", 3);
-        define("NOTIFICATION_TYPE_SMS", 4);
-
-        define("NOTIFICATION_TOKEN_TYPE_WEB", 1);
-        define("NOTIFICATION_TOKEN_TYPE_IOS", 2);
-        define("NOTIFICATION_TOKEN_TYPE_ANDROID", 3);
-
-
         $this->loadMigrationsFrom(__DIR__.'/Database/migrations');
 
         $this->publishes([
