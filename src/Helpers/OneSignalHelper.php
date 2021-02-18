@@ -39,7 +39,7 @@ class OneSignalHelper
                 if( $item->isEligibleNotification() ){
                     $params['user_id'] = $item->token;
                     $newParams = $this->processParams($params);
-                    OneSignal::sendNotificationToUser($newParams[0], $newParams[1], $newParams[2], $newParams[3], $newParams[4], $newParams[5]);
+                    OneSignal::sendNotificationToExternalUser($newParams[0], $newParams[1], $newParams[2], $newParams[3], $newParams[4], $newParams[5], $newParams[6], $newParams[7]);
                 }
             }
 
@@ -57,7 +57,9 @@ class OneSignalHelper
             null,
             null,
             null,
-            null
+            null,
+            null,
+            null,
         ];
         if( array_key_exists('msg', $params) ){
             $arr[0] = $params['msg'];
@@ -82,6 +84,12 @@ class OneSignalHelper
 
         if( array_key_exists('schedule', $params) )
             $arr[5] = $params['schedule'];
+
+        if( array_key_exists('headings', $params) )
+            $arr[6] = $params['headings'];
+
+        if( array_key_exists('subtitle', $params) )
+            $arr[7] = $params['subtitle'];
 
         $this->createNotificationOnDatabase($params);
 

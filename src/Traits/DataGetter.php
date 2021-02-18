@@ -35,7 +35,7 @@ trait DataGetter
                         'view' => sprintf($data['template']['content'], strtolower($data['country_code'])),
                         'data' => $data
                     ],
-                ];
+                 ];
                 break;
             case 'webnoti' :
             case 'mobilenoti' :
@@ -43,7 +43,11 @@ trait DataGetter
                 return [
                     'msg' => $content,
                     'url' => $data['url'] ?? null,
-                    'data' => $data['data'] ?? null
+                    'data' => $data['data'] ?? null,
+                    'buttons' => $data['buttons'] ?? null,
+                    'schedule' => $data['schedule'] ?? null,
+                    'headings' => $data['headings'] ?? null,
+                    'subtitle' => $data['subtitle'] ?? null,
                 ];
                 break;
             default :
@@ -72,7 +76,11 @@ trait DataGetter
                 return [
                     'msg' => $content,
                     'url' => $data['url'] ?? null,
-                    'data' => $data['data'] ?? null
+                    'data' => $data['data'] ?? null,
+                    'buttons' => $data['buttons'] ?? null,
+                    'schedule' => $data['schedule'] ?? null,
+                    'headings' => $data['headings'] ?? null,
+                    'subtitle' => $data['subtitle'] ?? null,
                 ];
                 break;
             default :

@@ -20,7 +20,7 @@ class CreateNotificationTable extends Migration
                 $table->string('notiuser_type');
                 $table->tinyInteger('type')->comment('1-email, 2-web_push, 3-native_push, 4-sms');
                 $table->string('subject');
-                $table->text('content');
+                $table->text('content')->nullable();
                 $table->text('target')->nullable();
                 $table->tinyInteger('is_read')->default(0);
                 $table->tinyInteger('status')->default(1);

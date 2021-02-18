@@ -109,11 +109,6 @@ class NotificationToken extends BaseModel
             }
         }
 
-        $instalation        = NotificationToken::updateOrCreate($anchor, $value);
-        if( $instalation ){
-            return $this->resCustom(TRUE);
-        }
-
         return $this->resCustom(FALSE);
     }
 

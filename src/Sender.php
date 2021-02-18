@@ -55,14 +55,18 @@ class Sender
             $html  = !empty($msg['content']['view']) ? $this->renderContent($msg['content']['view'], $msg['content']['data']) : "";
             $sub  = !empty($msg['content']['view']) ? $this->renderSubject($msg['subject']['view'], $msg['subject']['data']) : "";
 
+            $content = [
+                'content' => $html,
+                'subject' => $sub,
+                'target'  => $data['url'] ?? null,
+                'status' => Notification::NOTIFICATION_STATUS_FAILED
+            ];
+
             if( $this->response['email'][0] ) {
-                $content = [
-                    'content' => $html,
-                    'subject' => $sub,
-                    'target'  => $data['url'] ?? null
-                ];
-                $this->addToDatabase($user, $data['user_type'], NOTIFICATION_TYPE_EMAIL, $content);
+                $content['status'] = Notification::NOTIFICATION_STATUS_ACTIVE;
             }
+
+            $this->addToDatabase($user, $data['user_type'], NOTIFICATION_TYPE_EMAIL, $content);
         }
     }
 
@@ -77,14 +81,18 @@ class Sender
 
             $this->response['notification_web'] = $this->notiweb->sendNotificationToUser($user, $this->getMessageObject('webnoti', $data));
 
+            $content = [
+                'content' => $msg['msg'],
+                'subject' => $msg['msg'],
+                'target'  => $msg['url'] ?? null,
+                'status' => Notification::NOTIFICATION_STATUS_FAILED
+            ];
+
             if( $this->response['notification_web'][0] ) {
-                $content = [
-                    'content' => $msg['msg'],
-                    'subject' => $msg['msg'],
-                    'target'  => $msg['url'] ?? null
-                ];
-                $this->addToDatabase($user, $data['user_type'], NOTIFICATION_TYPE_WEB_PUSH, $content);
+                $content['status'] = Notification::NOTIFICATION_STATUS_ACTIVE;
             }
+
+            $this->addToDatabase($user, $data['user_type'], NOTIFICATION_TYPE_WEB_PUSH, $content);
         }
     }
 
@@ -99,14 +107,18 @@ class Sender
 
             $this->response['notification_mobile'] = $this->notimobile->sendNotificationToUser($user, $this->getMessageObject('mobilenoti', $data));
 
+            $content = [
+                'content' => $msg['msg'],
+                'subject' => $msg['msg'],
+                'target' => $msg['url'] ?? null,
+                'status' => Notification::NOTIFICATION_STATUS_FAILED
+            ];
+
             if( $this->response['notification_mobile'][0] ) {
-                $content = [
-                    'content' => $msg['msg'],
-                    'subject' => $msg['msg'],
-                    'target' => $msg['url'] ?? null
-                ];
-                $this->addToDatabase($user, $data['user_type'], NOTIFICATION_TYPE_NATIVE_PUSH, $content);
+                $content['status'] = Notification::NOTIFICATION_STATUS_ACTIVE;
             }
+
+            $this->addToDatabase($user, $data['user_type'], NOTIFICATION_TYPE_NATIVE_PUSH, $content);
         }
     }
 
@@ -117,12 +129,26 @@ class Sender
                 'notiuser_id'  => $user['user_id'],
                 'notiuser_type' => $userType,
                 'type'      => $type,
-                'content'   => $content['content'],
                 'target'    => $content['target'],
                 'subject'   => $content['subject'],
                 'is_read'   => false,
                 'created_at'   => Carbon::now(),
             ];
+
+            $storeContent = TRUE;
+            switch ($type){
+                case NOTIFICATION_TYPE_NATIVE_PUSH :
+                case NOTIFICATION_TYPE_WEB_PUSH :
+                    $storeContent = config('notification.log_push_content_notification');
+                    break;
+                case NOTIFICATION_TYPE_EMAIL :
+                    $storeContent = config('notification.log_email_content_notification');
+                    break;
+            }
+
+            if( $storeContent ){
+                $data['content'] = $content['content'];
+            }
 
             return Notification::insert($data);
         }

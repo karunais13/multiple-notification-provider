@@ -3,6 +3,8 @@
 namespace Karu\NpNotification;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
+use Laravel\Lumen\Application;
 use Route;
 
 class NpNotificationProvider extends ServiceProvider
@@ -37,11 +39,23 @@ class NpNotificationProvider extends ServiceProvider
             __DIR__.'/config/notification.php' => config_path('notification.php'),
         ]);
 
-        Route::middleware('web')
-            ->group(__DIR__.'/routes/notification.php');
+        if( !$this->isLumen() ){
+            Route::middleware('web')
+                ->group(__DIR__.'/routes/notification.php');
 
-        Route::prefix('api')
-            ->middleware('api')
-            ->group(__DIR__.'/routes/notification.php');
+            Route::prefix('api')
+                ->middleware('api')
+                ->group(__DIR__.'/routes/notification.php');
+        }
+    }
+
+    /**
+     * Check if app uses Lumen.
+     *
+     * @return bool
+     */
+    protected function isLumen()
+    {
+        return $this->app instanceof Application ?? false;
     }
 }

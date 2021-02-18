@@ -8,7 +8,8 @@ class Notification extends BaseModel
 {
     const
         NOTIFICATION_STATUS_ACTIVE     = 1,
-        NOTIFICATION_STATUS_INACTIVE   = 0
+        NOTIFICATION_STATUS_INACTIVE   = 0,
+        NOTIFICATION_STATUS_FAILED  = 2
     ;
 
     protected $fillable = [

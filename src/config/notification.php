@@ -68,14 +68,19 @@ return [
      * User Type
      */
     'user_type' => [
-        'd' => \App\Models\Sample::class, // Sample
-        'c' => \App\Models\Sample2::class, // Sample
+        'sample' => \App\Models\Sample::class, // Sample
     ],
 
-    'login_user_type' => 'd',
+    'login_user_type' => 'sample',
 
     /*
      * Store/Log Notification on database
      */
-    'log_notification' => true
+    'log_notification' => true,
+
+    /*
+     * Store Notification content on database
+     */
+    'log_email_content_notification' => true,
+    'log_push_content_notification' => true,
 ];
