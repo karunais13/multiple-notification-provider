@@ -105,12 +105,12 @@ class Sender
 
             $user['token']  = $this->removeUnwantedToken($user['token'],  [NOTIFICATION_TOKEN_TYPE_ANDROID, NOTIFICATION_TOKEN_TYPE_IOS]);
 
-            $this->response['notification_mobile'] = $this->notimobile->sendNotificationToUser($user, $this->getMessageObject('mobilenoti', $data));
+            $this->response['notification_mobile'] = $this->notimobile->sendNotificationToUser($user, $msg);
 
             $content = [
                 'content' => $msg['msg'],
                 'subject' => $msg['msg'],
-                'target' => $msg['url'] ?? null,
+                'target' => $msg['url'] ?? json_encode($msg['data'] ) ?? NULL,
                 'status' => Notification::NOTIFICATION_STATUS_FAILED
             ];
 
