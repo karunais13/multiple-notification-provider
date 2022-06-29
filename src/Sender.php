@@ -110,7 +110,7 @@ class Sender
             $content = [
                 'content' => $msg['msg'],
                 'subject' => $msg['msg'],
-                'target' => $msg['url'] ?? json_encode($msg['data'] ) ?? NULL,
+                'target' => $msg['data'] ? json_encode($msg['data'] ) : NULL,
                 'status' => Notification::NOTIFICATION_STATUS_FAILED
             ];
 
@@ -131,6 +131,7 @@ class Sender
                 'type'      => $type,
                 'target'    => $content['target'],
                 'subject'   => $content['subject'],
+                'status'   => $content['status'],
                 'is_read'   => false,
                 'created_at'   => Carbon::now(),
             ];

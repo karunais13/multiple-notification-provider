@@ -23,7 +23,7 @@ class CreateNotificationTable extends Migration
                 $table->text('content')->nullable();
                 $table->text('target')->nullable();
                 $table->tinyInteger('is_read')->default(0);
-                $table->tinyInteger('status')->default(1);
+                $table->tinyInteger('status')->default(1)->comment('1-active, 2-failed');
                 $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
                 $table->timestamp('updated_at')->nullable()->default(DB::raw('NULL on update CURRENT_TIMESTAMP'));
             });
