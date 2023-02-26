@@ -2,7 +2,8 @@
 
 namespace Karu\NpNotification\Helpers;
 
-use Mail;
+// use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class EmailHelper
 {
