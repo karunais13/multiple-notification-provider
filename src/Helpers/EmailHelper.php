@@ -27,15 +27,15 @@ class EmailHelper
                 $message->to($emails);
 
                 if( isset($data['reply_to']) ){
-                    $message->replyTo($content['reply_to']);
+                    $message->replyTo($data['reply_to']);
                 }
 
                 if( isset($data['bcc']) ){
-                    $message->bcc($content['bcc']);
+                    $message->bcc($data['bcc']);
                 }
 
                 if( isset($data['cc']) ){
-                    $message->cc($content['cc']);
+                    $message->cc($data['cc']);
                 }
 
                 if( isset($data['attach']) ){
