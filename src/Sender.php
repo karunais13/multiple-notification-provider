@@ -80,15 +80,14 @@ class Sender
             $user['token']  = $this->removeUnwantedToken($user['token'], [NOTIFICATION_TOKEN_TYPE_WEB]);
 
             $this->response['notification_web'] = $this->notiweb->sendNotificationToUser($user, $this->getMessageObject('webnoti', $data));
-
-            $msgData = $msg['data'] ? json_encode($msg['data']) : NULL;            
+        
             $content = [
                 'content' => $msg['msg'],
                 'subject' => $msg['msg'],
-                'target' => [
-                    'data' => $msgData,
+                'target' => json_encode([
+                    'data' => $msg['data'] ?? NULL,
                     'url' => $data['url'] ?? null
-                ],
+                ]),
                 'status' => Notification::NOTIFICATION_STATUS_FAILED
             ];
 
