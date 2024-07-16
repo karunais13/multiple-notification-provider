@@ -81,12 +81,17 @@ class Sender
 
             $this->response['notification_web'] = $this->notiweb->sendNotificationToUser($user, $this->getMessageObject('webnoti', $data));
 
+            $msgData = $msg['data'] ? json_encode($msg['data']) : NULL;            
             $content = [
                 'content' => $msg['msg'],
                 'subject' => $msg['msg'],
-                'target'  => $msg['url'] ?? null,
+                'target' => [
+                    'data' => $msgData,
+                    'url' => $data['url'] ?? null
+                ],
                 'status' => Notification::NOTIFICATION_STATUS_FAILED
             ];
+
 
             if( $this->response['notification_web'][0] ) {
                 $content['status'] = Notification::NOTIFICATION_STATUS_ACTIVE;
