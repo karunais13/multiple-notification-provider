@@ -4,8 +4,7 @@ namespace Karu\NpNotification;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Laravel\Lumen\Application;
-use Route;
+use Illuminate\Support\Facades\Route;
 
 class NpNotificationProvider extends ServiceProvider
 {
@@ -16,14 +15,28 @@ class NpNotificationProvider extends ServiceProvider
      */
     public function register()
     {
-        define("NOTIFICATION_TYPE_EMAIL", 1);
-        define("NOTIFICATION_TYPE_WEB_PUSH", 2);
-        define("NOTIFICATION_TYPE_NATIVE_PUSH", 3);
-        define("NOTIFICATION_TYPE_SMS", 4);
+        if (!defined('NOTIFICATION_TYPE_EMAIL')) {
+            define("NOTIFICATION_TYPE_EMAIL", 1);
+        }
+        if (!defined('NOTIFICATION_TYPE_WEB_PUSH')) {
+            define("NOTIFICATION_TYPE_WEB_PUSH", 2);
+        }
+        if (!defined('NOTIFICATION_TYPE_NATIVE_PUSH')) {
+            define("NOTIFICATION_TYPE_NATIVE_PUSH", 3);
+        }
+        if (!defined('NOTIFICATION_TYPE_SMS')) {
+            define("NOTIFICATION_TYPE_SMS", 4);
+        }
 
-        define("NOTIFICATION_TOKEN_TYPE_WEB", 1);
-        define("NOTIFICATION_TOKEN_TYPE_IOS", 2);
-        define("NOTIFICATION_TOKEN_TYPE_ANDROID", 3);
+        if (!defined('NOTIFICATION_TOKEN_TYPE_WEB')) {
+            define("NOTIFICATION_TOKEN_TYPE_WEB", 1);
+        }
+        if (!defined('NOTIFICATION_TOKEN_TYPE_IOS')) {
+            define("NOTIFICATION_TOKEN_TYPE_IOS", 2);
+        }
+        if (!defined('NOTIFICATION_TOKEN_TYPE_ANDROID')) {
+            define("NOTIFICATION_TOKEN_TYPE_ANDROID", 3);
+        }
     }
 
     /**
@@ -56,6 +69,6 @@ class NpNotificationProvider extends ServiceProvider
      */
     protected function isLumen()
     {
-        return $this->app instanceof Application ?? false;
+        return strpos($this->app->version(), 'Lumen') !== false;
     }
 }
