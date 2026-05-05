@@ -17,6 +17,7 @@ class Sender
     public $notiweb;
     public $notiemail;
     public $notimobile;
+    public $response = [];
 
     use Validation, DataGetter;
 
